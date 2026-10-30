@@ -129,4 +129,6 @@ public final class ObservationIndex implements ObservationSink {
         return new FactoryGraph(factory, stages, nodes,
                 edges.stream().filter(edge -> ids.contains(edge.from()) && ids.contains(edge.to())).toList());
     }
+
+    public void removeEdge(UUID id) { edges.removeIf(edge -> edge.id().equals(id)); }
 }

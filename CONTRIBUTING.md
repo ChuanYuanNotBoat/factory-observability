@@ -27,7 +27,7 @@ NeoForge 运行任务：
 .\gradlew.bat :platform-neoforge:verifySmokeClient
 ```
 
-`verifySmokeClient` 会启动独立客户端，在 `platform-neoforge/run-smoke/` 下创建新的测试世界、打开测试容器并验证同步；随后捕获中英文、GUI 缩放 2/3、列表/图两种视图共八张截图并正常退出。只允许测试夹具操作这个运行目录，测试 addon 不得进入安装包。该任务需要图形环境，不属于普通 CI 的 `build`。
+`verifySmokeClient` 会启动独立客户端，在 `platform-neoforge/run-smoke/` 下创建新的测试世界、打开测试容器并验证同步；还会实际点击容器入口、搜索、改名、选择目的地、取消、确认、删除和撤销，并检查 O 键不会抢占改名输入。随后捕获中英文、GUI 缩放 2/3 的库存/去向页面，以及首次使用、帮助、目的地选择和容器入口，共十二张截图并正常退出。只允许测试夹具操作这个运行目录，测试 addon 不得进入安装包。该任务需要图形环境，不属于普通 CI 的 `build`。
 
 依赖已完整下载后可使用 `--offline` 避免远程依赖解析。不要为了离线构建把缓存路径或第三方游戏文件提交到仓库。
 

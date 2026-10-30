@@ -1,6 +1,7 @@
 # Repository guidance
 
 - Product context is in `README.md`, `docs/architecture.md`, and `docs/roadmap.md`.
+- This is a simple helper mod for ordinary players. Prioritize direct clicks, visible item icons/amounts, and first-use guidance. Keep telemetry jargon out of normal screens and make relationship editing optional and reversible.
 - Keep user-facing explanations and project documentation in Chinese; use English Java identifiers.
 - Use JDK 21 and the checked-in Gradle Wrapper. Do not commit machine-specific Java paths.
 - Keep `core` production code JDK-only. Minecraft, loaders, and optional mods belong outside Core.

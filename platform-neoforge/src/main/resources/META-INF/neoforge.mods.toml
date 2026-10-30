@@ -5,10 +5,10 @@ license="All Rights Reserved"
 [[mods]]
 modId="factory_observability"
 version="${mod_version}"
-displayName="Factory Observability"
+displayName="Factory Helper"
 description='''
-Client-side factory observation. Records synchronized menu inventories and visible item entities.
-Server installation is not required. Quantities outside client visibility remain unknown.
+A simple client-side helper for chest and machine contents, nearby dropped items, and optional destination notes.
+Open a container and click View contents. No server installation or monitoring setup is required.
 '''
 
 [[dependencies.factory_observability]]

@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
 
 import dev.factoryobservability.core.observation.Observation;
 import dev.factoryobservability.core.observation.ObservationSink;
@@ -14,6 +15,7 @@ import dev.factoryobservability.minecraft.observation.ObservationSession;
 public final class ClientObservationHub implements ObservationSink {
     private final ClientSettings settings;
     private final Map<ResourceId, Component> names = new LinkedHashMap<>();
+    private final Map<ResourceId, ItemStack> previews = new LinkedHashMap<>();
     private ObservationSession session;
     private int omittedEntities;
 
@@ -23,12 +25,13 @@ public final class ClientObservationHub implements ObservationSink {
         if (session == null || !session.worldId().equals(worldId)) {
             session = new ObservationSession(worldId, settings.maximumNodes(), settings.maximumSamples(), settings.queueCapacity());
             names.clear();
+            previews.clear();
             omittedEntities = 0;
         }
         return session;
     }
 
-    public void clear() { session = null; names.clear(); omittedEntities = 0; }
+    public void clear() { session = null; names.clear(); previews.clear(); omittedEntities = 0; }
     public Optional<ObservationSession> session() { return Optional.ofNullable(session); }
 
     @Override
@@ -36,12 +39,17 @@ public final class ClientObservationHub implements ObservationSink {
         if (session != null && session.worldId().equals(observation.subject().worldId())) { session.bus().emit(observation); }
     }
 
-    public void name(ResourceId resource, Component label) {
+    public void remember(ResourceId resource, ItemStack stack) {
         if (!names.containsKey(resource) && names.size() >= settings.maximumNodes() * 4) {
-            names.remove(names.keySet().iterator().next());
+            ResourceId oldest = names.keySet().iterator().next();
+            names.remove(oldest);
+            previews.remove(oldest);
         }
-        names.put(resource, label.copy());
+        names.put(resource, stack.getHoverName().copy());
+        previews.put(resource, stack.copyWithCount(1));
     }
+
+    public ItemStack preview(ResourceId resource) { return previews.getOrDefault(resource, ItemStack.EMPTY).copy(); }
 
     public String name(ResourceId resource) {
         Component value = names.get(resource);

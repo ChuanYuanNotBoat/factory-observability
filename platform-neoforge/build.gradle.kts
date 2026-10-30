@@ -105,11 +105,11 @@ tasks.register("verifySmokeClient") {
     doLast {
         val log = file("run-smoke/logs/latest.log").readText()
         listOf("FACTORY SMOKE: menu inventory verified", "FACTORY SMOKE: replacement verified",
-                "FACTORY SMOKE: censored lifecycle verified", "FACTORY SMOKE PASSED").forEach {
+                "FACTORY SMOKE: censored lifecycle verified", "FACTORY SMOKE: helper interactions verified", "FACTORY SMOKE PASSED").forEach {
             check(it in log) { "Missing smoke evidence: $it" }
         }
         check("/FATAL]" !in log && "Shutdown failure!" !in log) { "Smoke client failed to shut down cleanly" }
-        check(fileTree("run-smoke/screenshots").matching { include("factoryobs-*.png") }.files.size >= 8) {
+        check(fileTree("run-smoke/screenshots").matching { include("factoryobs-*.png") }.files.size >= 12) {
             "Missing inspector screenshots"
         }
     }

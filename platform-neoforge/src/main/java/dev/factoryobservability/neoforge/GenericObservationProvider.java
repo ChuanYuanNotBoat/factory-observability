@@ -124,6 +124,26 @@ public final class GenericObservationProvider implements ObservationProvider {
         }
     }
 
+    /** Capture the visible menu before the helper closes it; no timed wait is needed. */
+    public void captureCurrentMenu() {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.level == null || mc.player == null || !(mc.screen instanceof AbstractContainerScreen<?> container)) { return; }
+        try {
+            ensureLevel(mc.level);
+            Instant now = Instant.now();
+            if (menu != container.getMenu()) {
+                endMenu(now, VisibilityEnded.Reason.MENU_CLOSED);
+                beginMenu(container.getMenu(), now);
+            }
+            sampleMenu(now);
+            endMenu(now, VisibilityEnded.Reason.MENU_CLOSED);
+            hub.session().ifPresent(session -> session.bus().drain(settings.queueCapacity()));
+        } catch (RuntimeException error) {
+            if (menuTracker != null) { menuTracker.interrupt(Instant.now()); }
+            failure("menu capture", error);
+        }
+    }
+
     private void ensureLevel(ClientLevel current) {
         if (level == current) { return; }
         Instant now = Instant.now();
@@ -181,7 +201,7 @@ public final class GenericObservationProvider implements ObservationProvider {
             if (!stack.isEmpty()) {
                 ResourceStack resource = ItemIdentityMapper.map(stack, level.registryAccess());
                 contents.add(resource);
-                hub.name(resource.resource(), stack.getHoverName());
+                hub.remember(resource.resource(), stack);
             }
         }
         menuTracker.sample(now, contents, menuSlots.size(), totalMenuSlots);
@@ -225,7 +245,7 @@ public final class GenericObservationProvider implements ObservationProvider {
                 return; // Empty during synchronization is not proof of destruction.
             }
             ResourceStack resource = ItemIdentityMapper.map(stack, level.registryAccess());
-            hub.name(resource.resource(), stack.getHoverName());
+            hub.remember(resource.resource(), stack);
             hub.session().orElseThrow().index().name(tracked.subject, stack.getHoverName().getString());
             emit(tracked.subject, now, new VisibilityStarted(), SYNC);
             tracked.visible = true;
