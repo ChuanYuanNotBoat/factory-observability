@@ -85,4 +85,4 @@ Linux / macOS：
 
 原始报告作为设计输入原样保存，其中的生成式引用标记没有可解析的来源映射，不代表已在本仓库验证的兼容性承诺。实现依赖的版本和文档应在对应阶段固定。
 
-项目发行许可证尚未选择；Gradle Wrapper 的第三方声明见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+本项目采用 [MIT 许可证](LICENSE) 发布；Gradle Wrapper 的第三方声明见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
