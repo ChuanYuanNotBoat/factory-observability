@@ -17,13 +17,25 @@
 
 生产 Core 当前只允许 JDK。外部适配必须放在相应模块，不得把 `ItemStack`、`BlockPos`、loader event 或任意 Mod 对象传入 Core。记录 DTO 时复制可变数据。
 
-`platform-*`、`compat-*` 的原生模块和 LItemFinder 集成当前为显式预留模块，只有 `base` 插件。选择目标版本后才添加对应构建插件和 Mod 依赖，不应为了让目录看似完整生成不可运行的加载器元数据。
+NeoForge 已接入 ModDevGradle 2.0.147、NeoForge 21.1.248 和 Minecraft 1.21.1 官方 mappings。`platform-fabric`、各原生 `compat-*` 和 LItemFinder 集成仍为预留模块。不要将 NeoForge 类型扩散到 common 或 Core。
+
+NeoForge 运行任务：
+
+```powershell
+.\gradlew.bat :platform-neoforge:runClient
+.\gradlew.bat :platform-neoforge:verifyModJar
+.\gradlew.bat :platform-neoforge:verifySmokeClient
+```
+
+`verifySmokeClient` 会启动独立客户端，在 `platform-neoforge/run-smoke/` 下创建新的测试世界、打开测试容器并验证同步；随后捕获中英文、GUI 缩放 2/3、列表/图两种视图共八张截图并正常退出。只允许测试夹具操作这个运行目录，测试 addon 不得进入安装包。该任务需要图形环境，不属于普通 CI 的 `build`。
+
+依赖已完整下载后可使用 `--offline` 避免远程依赖解析。不要为了离线构建把缓存路径或第三方游戏文件提交到仓库。
 
 ## 验证语义
 
 修改模型、投影或存储时，重点检查：跨世界/维度/主体/资源变体隔离、单位匹配、未知数量、有限数值、覆盖率与可信度分离、查询边界和容量限制。新增测试应验证用户可见语义或重要边界。
 
-真实 loader 接入之后，还需补充运行客户端、可选服务器缺席、菜单关闭、区块卸载、退出世界和未安装可选 Mod 的人工验证。普通 JVM 演示不能替代游戏内验证。
+普通 JVM 测试覆盖模型和数据语义；独立客户端验证覆盖安装包加载、真实容器同步、组件分离、玩家库存排除、资源替换和可见性中断。真正的远程纯原版服务器握手、切换维度、大型未知 Mod 菜单及满预算长时间运行仍需专项验证，不能用单人烟雾测试代替。
 
 ## 构建工具来源
 

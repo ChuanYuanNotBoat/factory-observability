@@ -12,12 +12,15 @@
 
 ## V0：Generic client-only foundation
 
-- [ ] 固定首个 Minecraft + loader + mappings 组合，并添加真实开发运行任务。
-- [ ] 实现 Factory → Stage → Node → Edge、世界身份和工厂范围。
-- [ ] 接入菜单同步事件、资源组件身份及槽位替换/会话关闭生命周期。
-- [ ] ItemEntity 生命周期与可见性删失记录。
-- [ ] 观察总线、提供者管理、观测区间、采样预算和错误隔离。
-- [ ] Structured View 与共享节点身份的基础 Graph。
+- [x] 固定 Minecraft 1.21.1 / NeoForge 21.1.248 / 官方 Mojang mappings，提供真实开发运行任务与安装包。
+- [x] 实现不可变 Factory → Stage → Node → Edge 模型、引用/循环验证、本地加盐世界身份。
+- [x] 当前世界会话自动分为容器和掉落物两组；自定义工厂范围与分组编辑待补充。
+- [x] 接入菜单同步状态、资源组件身份、槽位替换/会话关闭与读取失败生命周期。
+- [x] ItemEntity 可见库存、位置和生命周期删失记录；不从消失事件推断拾取或销毁。
+- [x] 有限观察总线、提供者生命周期、观测区间、采样预算和订阅者错误隔离。
+- [x] 可筛选/排序的列表、共享节点身份的基础 Graph、用户声明连接、中英文界面。
+- [x] 安装包客户端验证：真实菜单/实体同步，以及双语言、双缩放、双视图截图。
+- [ ] 自定义工厂范围、Stage 编辑和稳定物理容器位置映射；当前节点按菜单会话区分。
 - [ ] 对齐 LItemFinder 的稳定 availability API 并实现桥接。
 
 验收：在没有服务器 Mod、没有原生适配器时，打开未知机器菜单能观察已同步库存；断开可见性后明确显示数据缺口，不伪造零值或吞吐量。
@@ -42,10 +45,10 @@ Fluid、Energy、Create、AE2、机器状态、经验生长模型和告警。Sta
 
 | 决策 | 当前处理 |
 |---|---|
-| Minecraft / loader / mappings 版本 | 不从研究报告推测；先保持 Core 可独立构建，再选定首个目标组合 |
-| Fabric 与 NeoForge 推进顺序 | 保留双平台边界，不承诺同时支持所有版本 |
-| LItemFinder API | 先定义消费契约，待核对上游真实公开接口后实现 |
+| Minecraft / loader / mappings 版本 | 首个目标已固定为 1.21.1 / NeoForge 21.1.248 / 官方 mappings |
+| Fabric 与 NeoForge 推进顺序 | NeoForge 首先落地，Fabric 保留边界 |
+| LItemFinder API | 当前相邻工程没有稳定的 ResourceAvailability 提供接口，保留消费契约，不访问内部索引 |
 | 历史存储 | 原型使用有限内存；SQLite 或分段文件在 V0.5 决定 |
 | 精确数量与单位换算 | 当前监控用 double，精确遥测前决定数值与转换规则 |
 | 发行许可证 | 尚未选择，不自动沿用相邻项目许可证 |
-| 正式命名与 Mod ID | 仓库名 `factory-observability`；暂用指标 namespace `factory_observability`，loader metadata 未创建 |
+| 正式命名与 Mod ID | 仓库名 `factory-observability`，Mod ID / 指标 namespace 为 `factory_observability` |

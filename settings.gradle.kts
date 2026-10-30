@@ -1,7 +1,12 @@
 pluginManagement {
     repositories {
         gradlePluginPortal()
+        maven("https://maven.neoforged.net/releases")
     }
+}
+
+plugins {
+    id("net.neoforged.moddev.repositories") version "2.0.147"
 }
 
 dependencyResolutionManagement {

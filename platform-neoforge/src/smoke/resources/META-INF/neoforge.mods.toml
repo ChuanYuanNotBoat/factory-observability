@@ -1,0 +1,15 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+license="All Rights Reserved"
+
+[[mods]]
+modId="factory_observability_smoke"
+version="1"
+displayName="Factory Observability isolated smoke fixtures"
+
+[[dependencies.factory_observability_smoke]]
+modId="factory_observability"
+type="required"
+versionRange="[0,)"
+ordering="AFTER"
+side="CLIENT"
